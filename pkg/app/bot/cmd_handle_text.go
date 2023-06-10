@@ -26,31 +26,10 @@ func (b *bot) HandleTextCmd(upd tgbotapi.Update) {
 			ch.SetToken(upd.Message.Text)
 
 			reply := tgbotapi.NewMessage(upd.Message.Chat.ID, tokenSuccesfullySaved)
-			// reply.ParseMode = "html"
-
-			var (
-				commentsButton, questionButton replyKeyboardValue
-				settings                       = ch.GetSecctings()
-			)
-
-			if settings.CommentPushesOn {
-				commentsButton = ReplyCommentPushesOff
-			} else {
-				commentsButton = ReplyCommentPushesOn
-			}
-
-			if settings.QuestionPushesOn {
-				questionButton = ReplyQuestionsPushesOff
-			} else {
-				questionButton = ReplyQuestionsPushesOn
-			}
 
 			keyboard := tgbotapi.NewInlineKeyboardMarkup(
 				tgbotapi.NewInlineKeyboardRow(
-					tgbotapi.NewInlineKeyboardButtonData(string(commentsButton), string(commentsButton)),
-				),
-				tgbotapi.NewInlineKeyboardRow(
-					tgbotapi.NewInlineKeyboardButtonData(string(questionButton), string(questionButton)),
+					tgbotapi.NewInlineKeyboardButtonData(string(ButtonSettings), string(ButtonSettings)),
 				),
 			)
 			reply.ReplyMarkup = keyboard
@@ -62,13 +41,8 @@ func (b *bot) HandleTextCmd(upd tgbotapi.Update) {
 	}
 }
 
-type replyKeyboardValue string
+type buttonValue string
 
 const (
-	ReplyCommentPushesOn    = replyKeyboardValue("Уведомления: комментарии ✅")
-	ReplyQuestionsPushesOn  = replyKeyboardValue("Уведомления: вопросы ✅")
-	ReplyCommentPushesOff   = replyKeyboardValue("Уведомления: комментарии ❌")
-	ReplyQuestionsPushesOff = replyKeyboardValue("Уведомления: вопросы ❌")
-	// ✅ Включить оповещение о новых комментариях
-
+	ButtonSettings = buttonValue("🔔 Настройки уведомлений")
 )

@@ -13,21 +13,27 @@ type commandEntity struct {
 type commandKey string
 
 const (
-	StartCmdKey = commandKey("start")
-	HelpCmdKey  = commandKey("help")
+	StartCmdKey    = commandKey("start")
+	HelpCmdKey     = commandKey("help")
+	SettingsCmdKey = commandKey("settings")
 )
 
 func (b *bot) initCommands() error {
 	commands := []commandEntity{
 		{
 			key:    StartCmdKey,
-			desc:   "Запустить бота",
+			desc:   "▶️ Запустить бота",
 			action: b.StartCmd,
 		},
 		{
 			key:    HelpCmdKey,
-			desc:   "Поддержка",
+			desc:   "🆘 Поддержка",
 			action: b.HelpCmd,
+		},
+		{
+			key:    SettingsCmdKey,
+			desc:   "⚙️ Настройки",
+			action: b.SettingsCmd,
 		},
 	}
 
