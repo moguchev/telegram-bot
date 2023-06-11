@@ -1,20 +1,47 @@
 package bot
 
-import tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+import (
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/moguchev/telegram-bot/pkg/app/bot/storage"
+	"github.com/moguchev/telegram-bot/pkg/logger"
+)
 
 func (b *bot) SettingsNotificationsReviewsSwitchCallback(upd tgbotapi.Update) {
-	chatID := upd.CallbackQuery.Message.Chat.ID
+	const api = "SettingsNotificationsReviewsSwitchCallback"
+	var (
+		chatID = upd.CallbackQuery.Message.Chat.ID
+		id     = storage.ChatID(chatID)
+	)
 
-	ch, ok := b.chats.GetChat(ChatID(chatID))
-	if !ok {
+	ch, err := b.chats.GetChat(id)
+	if err != nil {
+		logger.ErrorKV(api,
+			"action", "GetChat",
+			"error", err,
+		)
 		return
 	}
 
-	ch.SetReviewsNotifications(!ch.GetSettings().ReviewsNotificationsOn)
+	err = b.chats.SetSettingsNotificationsReviews(id,
+		!ch.GetSettings().ReviewsNotificationsOn,
+	)
+	if err != nil {
+		logger.ErrorKV(api,
+			"action", "SetSettingsNotificationsReviews",
+			"error", err,
+		)
+		return
+	}
 
-	_ = b.apiRequest(tgbotapi.NewEditMessageReplyMarkup(
+	err = b.apiRequest(tgbotapi.NewEditMessageReplyMarkup(
 		chatID,
 		upd.CallbackQuery.Message.MessageID,
 		buildSettingsNotificationsKeyboardMarkup(ch.GetSettings()),
 	))
+	if err != nil {
+		logger.ErrorKV(api,
+			"action", "apiRequest",
+			"error", err,
+		)
+	}
 }

@@ -2,15 +2,24 @@ package bot
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/moguchev/telegram-bot/pkg/app/bot/storage"
 	"github.com/moguchev/telegram-bot/pkg/logger"
 	"go.uber.org/zap"
 )
 
 func (b *bot) SettingsCmd(upd tgbotapi.Update) {
-	chatID := upd.Message.Chat.ID
+	const api = "SettingsCmd"
+	var (
+		chatID = upd.Message.Chat.ID
+		id     = storage.ChatID(chatID)
+	)
 
-	ch, ok := b.chats.GetChat(ChatID(chatID))
-	if !ok {
+	ch, err := b.chats.GetChat(id)
+	if err != nil {
+		logger.ErrorKV(api,
+			"action", "GetChat",
+			"error", err,
+		)
 		return
 	}
 

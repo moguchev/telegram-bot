@@ -2,6 +2,8 @@ package bot
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/moguchev/telegram-bot/pkg/app/bot/storage"
+	"github.com/moguchev/telegram-bot/pkg/app/bot/storage/inmemmory"
 	"github.com/moguchev/telegram-bot/pkg/logger"
 	"go.uber.org/zap"
 )
@@ -11,7 +13,7 @@ type bot struct {
 
 	commands  map[commandKey]commandEntity
 	callbacks map[callbackType]callbackFn
-	chats     *Chats
+	chats     storage.ChatsStorage
 }
 
 // New creates bot instance
@@ -28,10 +30,12 @@ func New(token string, opts ...Option) (*bot, error) {
 
 	api.Debug = o.debug
 
+	chats := inmemmory.NewChatsStorage()
+
 	b := &bot{
 		BotAPI:   api,
 		commands: make(map[commandKey]commandEntity),
-		chats:    NewChats(),
+		chats:    chats,
 	}
 
 	if err := b.initCommands(); err != nil {

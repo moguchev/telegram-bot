@@ -2,6 +2,8 @@ package bot
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/moguchev/telegram-bot/pkg/app/bot/storage"
+	"github.com/moguchev/telegram-bot/pkg/logger"
 )
 
 const (
@@ -20,10 +22,21 @@ API-ключ — секретный ключ, который Wildberries выд�
 )
 
 func (b *bot) StartCmd(upd tgbotapi.Update) {
+	const api = "StartCmd"
+
 	b.sendMessage(upd.Message.Chat.ID, startMsg, true)
 
-	ch, ok := b.chats.GetChat(ChatID(upd.Message.Chat.ID))
-	if !ok {
+	var (
+		chatID = upd.Message.Chat.ID
+		id     = storage.ChatID(chatID)
+	)
+
+	ch, err := b.chats.GetChat(id)
+	if err != nil {
+		logger.ErrorKV(api,
+			"action", "GetChat",
+			"error", err,
+		)
 		return
 	}
 
