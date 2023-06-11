@@ -15,6 +15,6 @@ func (b *bot) SettingsNotificationsReviewsSwitchCallback(upd tgbotapi.Update) {
 	_ = b.apiRequest(tgbotapi.NewEditMessageReplyMarkup(
 		chatID,
 		upd.CallbackQuery.Message.MessageID,
-		buildSettingsKeyboardMarkup(ch.GetSettings()),
+		buildSettingsNotificationsKeyboardMarkup(ch.GetSettings()),
 	))
 }

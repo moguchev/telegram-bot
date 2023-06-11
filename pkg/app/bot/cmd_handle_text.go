@@ -10,7 +10,7 @@ const (
 	tokenSuccesfullySaved = "Токен успешно сохранен."
 )
 
-func (b *bot) HandleTextCmd(upd tgbotapi.Update) {
+func (b *bot) HandleText(upd tgbotapi.Update) {
 	ch, ok := b.chats.GetChat(ChatID(upd.Message.Chat.ID))
 	if !ok {
 		return

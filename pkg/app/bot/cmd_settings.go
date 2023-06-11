@@ -7,8 +7,15 @@ import (
 )
 
 func (b *bot) SettingsCmd(upd tgbotapi.Update) {
-	ch, ok := b.chats.GetChat(ChatID(upd.Message.Chat.ID))
+	chatID := upd.Message.Chat.ID
+
+	ch, ok := b.chats.GetChat(ChatID(chatID))
 	if !ok {
+		return
+	}
+
+	if ch.GetToken() == "" {
+		b.sendMessage(chatID, noAPIKeyMsg, true)
 		return
 	}
 
@@ -16,14 +23,14 @@ func (b *bot) SettingsCmd(upd tgbotapi.Update) {
 
 	message := "*Текущие настройки*:\n1. *Уведомления*"
 	if settings.ReviewsNotificationsOn {
-		message += "\n- Новые отзывы: включены ✅"
+		message += "\n- ⭐️ Новые отзывы: ✅ (включены)"
 	} else {
-		message += "\n- Новые отзывы: выключены ❌"
+		message += "\n- ⭐️ Новые отзывы: ❌ (выключены)"
 	}
 	if settings.QuestionsNotificationsOn {
-		message += "\n- Новые вопросы: включены ✅"
+		message += "\n- ❓ Новые вопросы: ✅ (включены)"
 	} else {
-		message += "\n- Новые вопросы: выключены ❌"
+		message += "\n- ❓ Новые вопросы: ❌ (выключены)"
 	}
 
 	reply := tgbotapi.NewMessage(upd.Message.Chat.ID, message)

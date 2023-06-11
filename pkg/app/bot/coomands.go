@@ -2,6 +2,8 @@ package bot
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/moguchev/telegram-bot/pkg/logger"
+	"go.uber.org/zap"
 )
 
 type commandEntity struct {
@@ -49,4 +51,14 @@ func (b *bot) initCommands() error {
 
 	config := tgbotapi.NewSetMyCommands(tgCommands...)
 	return b.apiRequest(config)
+}
+
+func (b *bot) HandleCommand(upd tgbotapi.Update) {
+	key := upd.Message.Command()
+
+	if cmd, ok := b.commands[commandKey(key)]; ok {
+		cmd.action(upd)
+	} else {
+		logger.Error("command handler not found", zap.String("cmd", key))
+	}
 }

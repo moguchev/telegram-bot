@@ -12,12 +12,12 @@ func (b *bot) SettingsNotificationsCallback(upd tgbotapi.Update) {
 
 	reply := tgbotapi.NewMessage(chatID, "Настройка уведомлений:")
 	reply.ParseMode = tgbotapi.ModeMarkdown
-	reply.ReplyMarkup = buildSettingsKeyboardMarkup(ch.GetSettings())
+	reply.ReplyMarkup = buildSettingsNotificationsKeyboardMarkup(ch.GetSettings())
 
 	_ = b.apiRequest(reply)
 }
 
-func buildSettingsKeyboardMarkup(s Settings) tgbotapi.InlineKeyboardMarkup {
+func buildSettingsNotificationsKeyboardMarkup(s Settings) tgbotapi.InlineKeyboardMarkup {
 	return tgbotapi.NewInlineKeyboardMarkup(
 		tgbotapi.NewInlineKeyboardRow(
 			tgbotapi.NewInlineKeyboardButtonData(
