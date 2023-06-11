@@ -7,25 +7,23 @@ import (
 )
 
 func (b *bot) SettingsCmd(upd tgbotapi.Update) {
-
 	ch, ok := b.chats.GetChat(ChatID(upd.Message.Chat.ID))
 	if !ok {
 		return
 	}
 
-	settings := ch.GetSecctings()
+	settings := ch.GetSettings()
 
 	message := "*Текущие настройки*:\n1. *Уведомления*"
-
-	if settings.CommentPushesOn {
-		message += "\nНовые комментрии: включены ✅"
+	if settings.ReviewsNotificationsOn {
+		message += "\n- Новые отзывы: включены ✅"
 	} else {
-		message += "\nНовые комментрии: выключены ❌"
+		message += "\n- Новые отзывы: выключены ❌"
 	}
-	if settings.QuestionPushesOn {
-		message += "\nНовые вопросы: включены ✅"
+	if settings.QuestionsNotificationsOn {
+		message += "\n- Новые вопросы: включены ✅"
 	} else {
-		message += "\nНовые вопросы: выключены ❌"
+		message += "\n- Новые вопросы: выключены ❌"
 	}
 
 	reply := tgbotapi.NewMessage(upd.Message.Chat.ID, message)
@@ -33,7 +31,7 @@ func (b *bot) SettingsCmd(upd tgbotapi.Update) {
 
 	keyboard := tgbotapi.NewInlineKeyboardMarkup(
 		tgbotapi.NewInlineKeyboardRow(
-			tgbotapi.NewInlineKeyboardButtonData(string(ButtonSettings), string(ButtonSettings)),
+			tgbotapi.NewInlineKeyboardButtonData(SettingsNotifications.Text(), SettingsNotifications.Data()),
 		),
 	)
 	reply.ReplyMarkup = keyboard

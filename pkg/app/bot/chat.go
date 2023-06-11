@@ -10,19 +10,23 @@ type Chats struct {
 }
 
 type Settings struct {
-	CommentPushesOn, QuestionPushesOn bool
+	ReviewsNotificationsOn, QuestionsNotificationsOn bool
 }
 
 type Chat interface {
 	GetToken() string
 	SetToken(token string)
-	GetSecctings() Settings
+	GetSettings() Settings
+	SetReviewsNotifications(v bool)
+	SetQuestionsNotifications(v bool)
 }
 
 type chat struct {
+	id    ChatID
+	token string
+
 	UserInfo
 	Settings
-	token string
 }
 
 type UserInfo struct {
@@ -39,8 +43,16 @@ func (c *chat) SetToken(token string) {
 	c.token = token
 }
 
-func (c *chat) GetSecctings() Settings {
+func (c *chat) GetSettings() Settings {
 	return c.Settings
+}
+
+func (c *chat) SetReviewsNotifications(v bool) {
+	c.Settings.ReviewsNotificationsOn = v
+}
+
+func (c *chat) SetQuestionsNotifications(v bool) {
+	c.Settings.QuestionsNotificationsOn = v
 }
 
 func NewChats() *Chats {
@@ -54,6 +66,7 @@ func (chs *Chats) AddChat(id ChatID, info UserInfo) Chat {
 	defer chs.mx.Unlock()
 
 	ch := &chat{
+		id:       id,
 		UserInfo: info,
 		Settings: Settings{},
 	}

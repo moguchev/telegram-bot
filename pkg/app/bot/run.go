@@ -67,6 +67,9 @@ func (b *bot) processUpdate(upd tgbotapi.Update) {
 		// 	b.SearchCmd(upd)
 		// }
 	}
+	if upd.CallbackQuery != nil {
+		b.HandleCallback(upd)
+	}
 
 	// if upd.CallbackQuery != nil {
 	// 	data := upd.CallbackData()

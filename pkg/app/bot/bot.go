@@ -9,8 +9,9 @@ import (
 type bot struct {
 	*tgbotapi.BotAPI
 
-	commands map[commandKey]commandEntity
-	chats    *Chats
+	commands  map[commandKey]commandEntity
+	callbacks map[callbackType]callbackFn
+	chats     *Chats
 }
 
 // New creates bot instance
@@ -36,6 +37,8 @@ func New(token string, opts ...Option) (*bot, error) {
 	if err := b.initCommands(); err != nil {
 		return nil, err
 	}
+
+	b.initCallbacks()
 
 	logger.Info("bot created", zap.String("username", api.Self.UserName))
 	return b, nil
