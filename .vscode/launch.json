@@ -12,7 +12,8 @@
             "program": "${workspaceFolder}/cmd/bot",
             "cwd": "${workspaceFolder}",
             "env": {
-                "TELEGRAM_API_TOKEN": "6107254302:AAGlxZEQ5G75UTiSXGt3m0eEv64_KUuXpHI"
+                "TELEGRAM_API_TOKEN": "6107254302:AAGlxZEQ5G75UTiSXGt3m0eEv64_KUuXpHI",
+                "DB_DSN": "host=localhost port=5432 user=user password=password dbname=wb_helper sslmode=disable"
             },
             "args": []
         }

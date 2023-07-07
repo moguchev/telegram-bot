@@ -1,6 +1,6 @@
 package inmemmory
 
-import . "github.com/moguchev/telegram-bot/pkg/app/bot/storage"
+import . "github.com/moguchev/telegram-bot/internal/app/bot/storage"
 
 type chat struct {
 	id    ChatID

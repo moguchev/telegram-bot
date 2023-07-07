@@ -2,7 +2,7 @@ package bot
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/moguchev/telegram-bot/pkg/app/bot/storage"
+	"github.com/moguchev/telegram-bot/internal/app/bot/storage"
 	"github.com/moguchev/telegram-bot/pkg/logger"
 	"go.uber.org/zap"
 )

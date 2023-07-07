@@ -1,0 +1,43 @@
+version: "3.3"
+
+networks:
+  net:
+    driver: bridge
+
+services:
+  postgres:
+    image: postgres:14.4
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: wb_helper
+    container_name: 'postgresql-wb-helper-db'
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data # том для того, чтобы при перезапуске контейнера все данные сохранялись
+      - ./postgres.conf:/etc/postgresql/postgresql.conf # конфиг БД
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    ports:
+      - 5432:5432
+    restart: always
+    networks:
+      - net
+  # facade:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   deploy:
+  #     replicas: 1
+  #     resources:
+  #       limits:
+  #         cpus: '1'
+  #         memory: 4G
+  #   container_name: 'facade-container'
+  #   restart: unless-stopped
+  #   hostname: facade
+  #   environment:
+  #     DB_DSN: host=postgres port=5432 user=user password=password dbname=bazar sslmode=disable
+  #   ports:
+  #     - 8002:8002
+  #     - 8000:8000
+  #   command: ./facade
+    # depends_on:

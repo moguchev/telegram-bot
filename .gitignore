@@ -1,2 +1,4 @@
 tgtoken.key
 export_token.sh
+postgresql/
+bin/

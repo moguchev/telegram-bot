@@ -3,7 +3,7 @@ package inmemmory
 import (
 	"sync"
 
-	. "github.com/moguchev/telegram-bot/pkg/app/bot/storage"
+	. "github.com/moguchev/telegram-bot/internal/app/bot/storage"
 )
 
 type chats struct {
